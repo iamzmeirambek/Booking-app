@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hotel_id')->constrained('hotels');
+            $table->string('full_name');
             $table->string('comment');
             $table->string('limitations');
             $table->string('rating');

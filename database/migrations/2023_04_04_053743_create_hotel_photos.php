@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hotel_rooms', function (Blueprint $table) {
+        Schema::create('hotel_photos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hotel_id')->constrained('hotels');
-            $table->string('roomType');
-            $table->integer('capacity');
-            $table->string('bedOption');
-            $table->integer('price');
-            $table->string('view');
-            $table->integer('totalRooms');
+            $table->string('path');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hotel_rooms');
+        Schema::dropIfExists('hotel_photos');
     }
 };

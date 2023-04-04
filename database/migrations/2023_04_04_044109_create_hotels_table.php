@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('address');
-            $table->string('City');
-            $table->string('Country');
-            $table->string('TelephoneNumber');
-            $table->string('ImagePath');
+            $table->string('city');
+            $table->string('country');
+            $table->string('telephoneNumber');
+            $table->string('imagePath');
             $table->timestamps();
             $table->softDeletes();
         });
