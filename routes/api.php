@@ -20,9 +20,9 @@ use App\Http\Controllers\API\V1\UserController;
             Route::post('/register', 'register');
             Route::post('/login', 'login');
 
-//            Route::group(['middleware' => ['auth:sanctum']], function () {
-//                Route::get('/posts', [UserController::class, 'search']);
-//            });
+            Route::group(['middleware' => ['auth:sanctum']], function () {
+                Route::post('/logout', 'logout');
+            });
         });
     });
 
