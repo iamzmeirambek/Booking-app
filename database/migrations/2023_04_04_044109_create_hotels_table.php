@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('country');
             $table->string('telephoneNumber');
-            $table->string('imagePath');
+            $table->string('imagePath')->default('null');
             $table->timestamps();
             $table->softDeletes();
         });
