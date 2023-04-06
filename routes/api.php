@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\v1\admin\HotelController;
 use App\Http\Controllers\API\V1\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,23 +19,29 @@ use Illuminate\Support\Facades\Route;
         Route::controller(AuthController::class)->group(function () {
             Route::post('/register', 'register');
             Route::post('/login', 'login');
-
+            Route::post('/forgot_password', 'forgot_password');
+            Route::post('/reset_password', 'reset_password');
             Route::group(['middleware' => ['auth:sanctum']], function () {
                 Route::post('/logout', 'logout');
             });
         });
-        Route::prefix('hotel')->group(function () {
-            Route::controller(\App\Http\Controllers\api\v1\HotelController::class)->group(function () {
-                Route::get('/','index');
-                Route::get('/{hotel}','show');
-                Route::post('/store', 'store');
-                Route::put('/edit/{hotel}', 'update');
-                Route::delete('/delete/{hotel}', 'destroy');
+
+        Route::middleware('auth:sanctum')->group(function() {
+            Route::prefix('admin/hotel')->group(function () {
+                Route::controller(HotelController::class)->group(function () {
+                    Route::post('/store', 'store');
+                    Route::put('/edit/{hotel}', 'update');
+                    Route::delete('/delete/{hotel}', 'destroy');
+                });
+                Route::get('user/bookings',
+                    [\App\Http\Controllers\api\v1\User\BookingController::class, 'index']);
             });
         });
-        Route::middleware('auth:sanctum')->group(function() {
-            Route::get('user/bookings',
-                [\App\Http\Controllers\api\v1\User\BookingController::class, 'index']);
-        });
-    });
+        Route::prefix('hotel')->group(function () {
+            Route::controller(HotelController::class)->group(function () {
+                Route::get('/','index');
+                Route::get('/{hotel}','show');
 
+            });
+         });
+    });

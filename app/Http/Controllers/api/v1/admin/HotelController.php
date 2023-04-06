@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\api\v1\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HotelRequest;
@@ -23,8 +23,6 @@ class HotelController extends Controller
     {
         $this->authorize('hotel-manage');
 
-        return response()->json(['success' => true]);
-
         $hotel = Hotel::query()->create($request->validated());
         return response()->json([
             'message' => 'Hotel Created'
@@ -32,6 +30,8 @@ class HotelController extends Controller
     }
     public function update(HotelRequest $request, Hotel $hotel)
     {
+        $this->authorize('hotel-manage');
+
         $hotel->update($request->validated());
         return response()->json([
             'message' => 'Hotel Updated'
@@ -40,6 +40,8 @@ class HotelController extends Controller
 
     public function destroy(Hotel $hotel)
     {
+        $this->authorize('hotel-manage');
+
         $hotel->delete();
         return response()->json([
             'message' => 'Hotel Deleted'

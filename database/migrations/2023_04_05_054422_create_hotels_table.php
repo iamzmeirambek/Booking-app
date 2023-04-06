@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('address');
-            $table->string('city');
-            $table->string('country');
-            $table->string('telephoneNumber');
-            $table->string('imagePath')->default('null');
+            $table->foreignId('city_id')->constrained('cities');
+            $table->string('phone_number');
+            $table->decimal('lat', 10, 7)->nullable();
+            $table->decimal('long', 10, 7)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
