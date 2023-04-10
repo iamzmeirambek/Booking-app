@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\api\v1\admin\HotelController;
+use App\Http\Controllers\api\v1\Public\HotelSearchController;
+
 use App\Http\Controllers\API\V1\AuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 */
 
     Route::prefix('v1')->group(function () {
+        Route::controller(HotelSearchController::class)->group(function () {
+            Route::get('/search', 'index');
+        });
         Route::controller(AuthController::class)->group(function () {
             Route::post('/register', 'register');
             Route::post('/login', 'login');
@@ -26,9 +32,11 @@ use Illuminate\Support\Facades\Route;
             });
         });
 
-        Route::middleware('auth:sanctum')->group(function() {
+        Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::prefix('admin/hotel')->group(function () {
                 Route::controller(HotelController::class)->group(function () {
+                    Route::get('/','index');
+                    Route::get('/{hotel}','show');
                     Route::post('/store', 'store');
                     Route::put('/edit/{hotel}', 'update');
                     Route::delete('/delete/{hotel}', 'destroy');
@@ -37,11 +45,4 @@ use Illuminate\Support\Facades\Route;
                     [\App\Http\Controllers\api\v1\User\BookingController::class, 'index']);
             });
         });
-        Route::prefix('hotel')->group(function () {
-            Route::controller(HotelController::class)->group(function () {
-                Route::get('/','index');
-                Route::get('/{hotel}','show');
-
-            });
-         });
     });

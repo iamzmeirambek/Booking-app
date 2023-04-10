@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Jobs\SendPasswordJob;
 use App\Mail\User\PasswordMail;
+use App\Models\PasswordResetToken;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -52,10 +55,8 @@ class AuthController extends Controller
         return response($res, 201);
     }
 
-    public function forgot_password(Request $request){
-        $request->validate([
-            'email' => 'required|email|exists:users',
-        ]);
+    public function forgot_password(EmailRequest $request){
+
         $token = Str::random(64);
         $data['email']=$request->email;
         $data['token']=$token;
@@ -71,14 +72,8 @@ class AuthController extends Controller
         ],203);
 
     }
-    public function reset_password(Request $request){
-        $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required|string|min:8|',
-            'password_confirmation' => 'required|same:password'
-        ]);
-
-        $updatePassword = DB::table('password_reset_tokens')
+    public function reset_password(ResetPasswordRequest $request){
+        $updatePassword = PasswordResetToken::query()
             ->where([
                 'email' => $request->email,
                 'token' => $request->token
@@ -92,9 +87,10 @@ class AuthController extends Controller
                 'error' => 'Invalid token!'
             ]);
         }
-
         $user = User::query()->where('email', $request->email)
             ->update(['password' => Hash::make($request->password)]);
+
+        $updatePassword->query()->update(array('activated_at' => Carbon::now()));
 
         return response()->json([
             'message' => 'Your password updated!'

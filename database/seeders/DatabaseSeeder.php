@@ -22,13 +22,19 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            RoleSeeder::class,
-            AdminUserSeeder::class,
-            PermissionSeeder::class,
-
-            CountrySeeder::class,
-            CitySeeder::class,
-            GeoobjectSeeder::class,
+//            RoleSeeder::class,
+//            AdminUserSeeder::class,
+//            PermissionSeeder::class,
+//
+//            CountrySeeder::class,
+//            CitySeeder::class,
+//            GeoobjectSeeder::class,
+//
+//            HotelSeeder::class,
+//            ApartmentTypeSeeder::class,
+//            ApartmentSeeder::class
+            RoomSeeder::class,
+            BedSeeder::class
         ]);
     }
 }

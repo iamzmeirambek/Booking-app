@@ -4,35 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Room extends Model
 {
-    use HasFactory,SoftDeletes;
-
-    protected $table = 'hotel_rooms';
-    protected $primaryKey = 'id';
+    use HasFactory;
 
     protected $fillable = [
-        'hotel_id',
-        'roomType',
-        'capacity',
-        'bedOption',
-        'price',
-        'view',
-        'totalRooms',
+      'apartment_id',
+      'room_type_id',
+      'name'
     ];
 
-    public function hotel(): belongsTo
+    public function room_type()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(RoomType::class);
     }
 
-    public function reservation(): hasMany
+    public function apartment()
     {
-        return $this->hasMany(Reservation::class,'room_id','id');
+        return $this->belongsTo(Apartment::class);
     }
 
+    public function beds()
+    {
+        return $this->hasMany(Bed::class);
+    }
 }
